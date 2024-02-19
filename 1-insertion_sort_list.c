@@ -13,8 +13,7 @@
  */
 void insertion_sort_list(listint_t **list)
 {
-	listint_t *to = NULL, *fro = NULL, *new_to = NULL;
-	int swapped = 0;
+	listint_t *to = NULL, *fro = NULL, *new_fro = NULL, *fro_next = NULL;
 
 	/*Starting at next since a list must have atleast 2 items for sorting*/
 	if (list && *list && (*list)->next)
@@ -22,97 +21,85 @@ void insertion_sort_list(listint_t **list)
 
 	while (to)
 	{
-		swapped = 0;
 		fro = to->prev;
-		/*Find suitable position of "to" in the sorted side*/
-		while (fro && fro->n > to->n)
-			fro = fro->prev;
-
-		new_to = to->next;
-		if (fro && fro != to->prev)
+		to = to->next;
+		while (fro && fro->n > fro->next->n)
 		{
-			/*Insert "to" after "fro"*/
-			swapped = insert_after(&fro, &to);
-			if (!swapped)
+			new_fro = fro->prev;
+			fro_next = fro->next;
+			if (!swap_list(&fro, &fro_next))
 				return;
-		}
-		else if (!fro)
-		{
-			/*Insert at the beginning of the list*/
-			swapped = insert_top(list, &to);
-			if (!swapped)
-				return;
-		}
 
-		/*Update head pointer if necessary*/
-		if ((*list)->prev)
-			*list = to;
+			fro = new_fro;
+			if ((*list)->prev)
+				*list = fro_next;
 
-		if (swapped)
 			print_list(*list);
-
-		to = new_to;
+		}
 	}
 }
 
 /**
- * insert_after - insert src node after dest node
- * @dest: address of the node to insert after
- * @src: address of the node to insert
+ * swap_list -
+ * @n_a:
+ * @n_b:
  *
  * Return: 1 on success, 0 on failure
  */
-int insert_after(listint_t **dest, listint_t **src)
+int swap_list(listint_t **n_a, listint_t **n_b)
 {
-	if (!src || !dest || !(*dest))
+	listint_t temp = {0, NULL, NULL}, *copy = NULL;
+
+	if (!n_a || !(*n_a) || !n_b || !(*n_b))
 		return (0);
 
-	if ((*dest)->next == *src)
-		return (1);
-
-	if (*src)
+	/*Separating n_a and n_b with a tmporary node*/
+	if ((*n_a)->next == *n_b)
 	{
-		/*Updating neighbours of src*/
-		if ((*src)->next)
-			(*src)->next->prev = (*src)->prev;
-
-		(*src)->prev->next = (*src)->next;
-
-		/*Updating src pointers*/
-		(*src)->next = (*dest)->next;
-		(*src)->prev = *dest;
+		/* Insert "temp" in between them (after n_a) */
+		(*n_a)->next = &temp;
+		(*n_b)->prev = &temp;
+		temp.next = *n_b;
+		temp.prev = *n_a;
+	}
+	else if ((*n_a)->prev == *n_b)
+	{
+		/* Insert "temp" in between them (before n_a) */
+		(*n_a)->prev = &temp;
+		(*n_b)->next = &temp;
+		temp.next = *n_a;
+		temp.prev = *n_b;
 	}
 
-	/*Updating dest next pointer and forward neighbour*/
-	(*dest)->next->prev = (*src);
-	(*dest)->next = (*src);
-	return (1);
-}
+	/*Handle n_a's neighbours*/
+	if ((*n_a)->prev)
+		(*n_a)->prev->next = *n_b;
 
-/**
- * insert_top - makes src the new head of the list
- * @head: address of the head of the list
- * @src: address of the node to insert
- *
- * Return: 1 on success, 0 on failure
- */
-int insert_top(listint_t **head, listint_t **src)
-{
-	if (!src || !(*src) || !head || !(*head))
-		return (0);
+	if ((*n_a)->next)
+		(*n_a)->next->prev = *n_b;
 
-	/*Updating neighbours of src*/
-	if ((*src)->next)
-		(*src)->next->prev = (*src)->prev;
+	/*Handle n_b's neighbours*/
+	if ((*n_b)->prev)
+		(*n_b)->prev->next = *n_a;
 
-	(*src)->prev->next = (*src)->next;
+	if ((*n_b)->next)
+		(*n_b)->next->prev = *n_a;
 
-	/*Updating src pointers*/
-	(*src)->next = *head;
-	(*src)->prev = NULL;
+	/*Swapping next pointers*/
+	copy = (*n_a)->next;
+	(*n_a)->next = (*n_b)->next;
+	(*n_b)->next = copy;
 
-	/*Updating head neighbours and head*/
-	(*head)->prev = *src;
-	*head = *src;
+	/*Swapping prev pointers*/
+	copy = (*n_a)->prev;
+	(*n_a)->prev = (*n_b)->prev;
+	(*n_b)->prev = copy;
+	/*Remove temp from list*/
+	if (temp.next)
+	{
+		temp.next->prev = temp.prev;
+		temp.prev->next = temp.next;
+	}
+
 	return (1);
 }
