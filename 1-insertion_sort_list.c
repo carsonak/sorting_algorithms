@@ -5,10 +5,10 @@
  * @list: head linked list
  *
  * Description: Insertion sort tracks a boundary in the list where one side
- * contains the unsorted list and the other th sorted list. (The sorted side
+ * contains the unsorted list and the other the sorted list. (The sorted side
  * usually begins empty while the unsorted side is full).
- * Items from the unsorted side will be inserted into the correct position in
- * the sorted side.
+ * Items from the unsorted side will be popped then inserted into the correct
+ * position in the sorted side.
  *
  */
 void insertion_sort_list(listint_t **list)
