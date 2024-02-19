@@ -1,5 +1,8 @@
 #include "sort.h"
 
+int insert_after(listint_t **dest, listint_t **src);
+int insert_top(listint_t **head, listint_t **src);
+
 /**
  * insertion_sort_list - insertion sort
  * @list: linked list

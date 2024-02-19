@@ -2,7 +2,7 @@
 
 /**
  * insertion_sort_list - insertion sort
- * @list: linked list
+ * @list: head linked list
  *
  * Description: Insertion sort tracks a boundary in the list where one side
  * contains the unsorted list and the other th sorted list. (The sorted side
@@ -30,19 +30,19 @@ void insertion_sort_list(listint_t **list)
 			if (!swap_list(&fro, &fro_next))
 				return;
 
-			fro = new_fro;
 			if ((*list)->prev)
 				*list = fro_next;
 
 			print_list(*list);
+			fro = new_fro;
 		}
 	}
 }
 
 /**
- * swap_list -
- * @n_a:
- * @n_b:
+ * swap_list - swaps nodes of a linked list
+ * @n_a: address of the pointer to node a
+ * @n_b: address of the pointer to node b
  *
  * Return: 1 on success, 0 on failure
  */
@@ -54,22 +54,7 @@ int swap_list(listint_t **n_a, listint_t **n_b)
 		return (0);
 
 	/*Separating n_a and n_b with a tmporary node*/
-	if ((*n_a)->next == *n_b)
-	{
-		/* Insert "temp" in between them (after n_a) */
-		(*n_a)->next = &temp;
-		(*n_b)->prev = &temp;
-		temp.next = *n_b;
-		temp.prev = *n_a;
-	}
-	else if ((*n_a)->prev == *n_b)
-	{
-		/* Insert "temp" in between them (before n_a) */
-		(*n_a)->prev = &temp;
-		(*n_b)->next = &temp;
-		temp.next = *n_a;
-		temp.prev = *n_b;
-	}
+	sep_nodes(n_a, n_b, &temp);
 
 	/*Handle n_a's neighbours*/
 	if ((*n_a)->prev)
@@ -94,6 +79,7 @@ int swap_list(listint_t **n_a, listint_t **n_b)
 	copy = (*n_a)->prev;
 	(*n_a)->prev = (*n_b)->prev;
 	(*n_b)->prev = copy;
+
 	/*Remove temp from list*/
 	if (temp.next)
 	{
@@ -102,4 +88,34 @@ int swap_list(listint_t **n_a, listint_t **n_b)
 	}
 
 	return (1);
+}
+
+/**
+ * sep_nodes - if node a and node b are neighbours, place a temporary node
+ * in between them
+ * @n_a: address of the pointer to node a
+ * @n_b: address of the pointer to node b
+ * @separator: pointer to node to use as a separator
+ */
+void sep_nodes(listint_t **n_a, listint_t **n_b, listint_t *separator)
+{
+	if (!n_a || !(*n_a) || !n_b || !(*n_b) || !separator)
+		return;
+
+	if ((*n_a)->next == *n_b)
+	{
+		/*place separator after n_a*/
+		(*n_a)->next = separator;
+		(*n_b)->prev = separator;
+		separator->next = *n_b;
+		separator->prev = *n_a;
+	}
+	else if ((*n_a)->prev == *n_b)
+	{
+		/*place separator before n_a*/
+		(*n_a)->prev = separator;
+		(*n_b)->next = separator;
+		separator->next = *n_a;
+		separator->prev = *n_b;
+	}
 }
