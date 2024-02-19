@@ -7,7 +7,8 @@
  */
 void quick_sort(int *array, size_t size)
 {
-	range_manager(array, 0, size, size);
+	if (array && size)
+		range_manager(array, 0, size, size);
 }
 
 /**
@@ -23,7 +24,7 @@ void range_manager(int *array, size_t bot, size_t top, size_t size)
 	size_t piv_i = 0;
 
 	/*Base case: partition should have atleast 2 elements*/
-	if ((top - bot) < 2)
+	if (!array || !size || (top - bot) < 2)
 		return;
 
 	piv_i = lomuto_partition(array, bot, top, size);
@@ -53,6 +54,9 @@ size_t lomuto_partition(int *array, size_t bot, size_t top, size_t size)
 	size_t g = bot + 1, piv_i = bot;
 	int pivot = array[top - 1], tmp = 0;
 
+	if (!array || !size)
+		return (0);
+
 	while (g < top - 1)
 	{
 		/*Push items less than or equal to the pivot to the left of piv_i*/
@@ -74,6 +78,8 @@ size_t lomuto_partition(int *array, size_t bot, size_t top, size_t size)
 		array[piv_i] = pivot;
 		print_array(array, size);
 	}
+	else
+		piv_i++;
 
 	return (piv_i);
 }

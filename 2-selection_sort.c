@@ -16,6 +16,9 @@ void selection_sort(int *array, size_t size)
 	size_t g = 0, h = 0, s_i = 0;
 	int smallest = 0;
 
+	if (!array || !size)
+		return;
+
 	for (g = 0; g < size - 1; g++)
 	{
 		s_i = g;

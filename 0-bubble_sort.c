@@ -10,6 +10,9 @@ void bubble_sort(int *array, size_t size)
 	size_t g = 1, max = size, new_max = 0;
 	int b = 0, swapped = 1;
 
+	if (!array)
+		return;
+
 	while (swapped)
 	{
 		swapped = 0;
