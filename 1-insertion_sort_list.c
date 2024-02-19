@@ -44,6 +44,10 @@ void insertion_sort_list(listint_t **list)
  * @n_a: address of the pointer to node a
  * @n_b: address of the pointer to node b
  *
+ * Description: this function will swap nodes in a list. If the nodes
+ * neighbour each other it will separate them with a temporary node
+ * so that pointer references are not accidentally lost
+ *
  * Return: 1 on success, 0 on failure
  */
 int swap_list(listint_t **n_a, listint_t **n_b)
