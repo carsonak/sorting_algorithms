@@ -1,7 +1,7 @@
 #include "sort.h"
 
 /**
- * quick_sort - Quick sort
+ * quick_sort - Quick sort with Lomuto partitioning scheme
  * @array: the array to be sorted
  * @size: length of the array
  */
@@ -12,8 +12,8 @@ void quick_sort(int *array, size_t size)
 }
 
 /**
- * range_manager - recursively partitions an array into smaller ranges till
- * they can be sorted trivially.
+ * range_manager - recursively partitions an array in two sections with
+ * values either greater or less than the middle value
  * @array: the array to be partitioned
  * @bot: the starting index of the range
  * @top: size of the range
@@ -42,18 +42,19 @@ void range_manager(int *array, size_t bot, size_t top, size_t size)
  * @size: size of the whole array
  *
  * Description: This function will select the last index in the range as the
- * pivot then partition the range into two sections. One section will contain
- * values greater than the pivot and the other section the rest. The pivot is
- * then inserted in between these two sections.
+ * pivot which partitions the range into two sections. One section will
+ * contain values greater than the pivot and the other section the rest.
+ * Once all the items have been sorted, the pivot is then inserted at the
+ * border of the two sections.
  * The index of the pivot is then rturned
  *
  * Return: index of the pivot
  */
 size_t lomuto_partition(int *array, size_t bot, size_t top, size_t size)
 {
-	/*g searches the upper boundary*/
+	/*g searches the upper section*/
 	size_t g = bot + 1;
-	/*piv_i keeps track of the border between the boundaries*/
+	/*piv_i tracks the border between the sections*/
 	size_t piv_i = bot;
 	int pivot = array[top - 1], tmp = 0;
 
@@ -62,7 +63,7 @@ size_t lomuto_partition(int *array, size_t bot, size_t top, size_t size)
 
 	while (g < top - 1)
 	{
-		/*Swapping items less than pivot to the lower boundary*/
+		/*Swapping items less than pivot into the lower section*/
 		/*Swapping will only occur if necessary*/
 		if (array[g] <= pivot && array[piv_i] > pivot)
 		{
@@ -72,13 +73,14 @@ size_t lomuto_partition(int *array, size_t bot, size_t top, size_t size)
 			print_array(array, size);
 		}
 
-		/*Ensure a items <= pivot are always in the lower boundary*/
+		/*Ensure a items <= pivot are always in the lower section*/
 		if (array[piv_i] <= pivot)
 			piv_i++;
 
 		g++;
 	}
 
+	/*Placing pivot at the border*/
 	if (array[piv_i] > pivot)
 	{
 		array[top - 1] = array[piv_i];
@@ -86,7 +88,7 @@ size_t lomuto_partition(int *array, size_t bot, size_t top, size_t size)
 		print_array(array, size);
 	}
 	else
-		piv_i++;
+		piv_i = g;
 
 	return (piv_i);
 }
