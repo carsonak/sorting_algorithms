@@ -8,10 +8,10 @@ int insert_top(listint_t **head, listint_t **src);
  * @list: linked list
  *
  * Description: Insertion sort tracks a boundary in the list where one side
- * contains the unsorted list and the other th sorted list. (The sorted side
+ * contains the unsorted list and the other the sorted list. (The sorted side
  * usually begins empty while the unsorted side is full).
  * Items from the unsorted side will be inserted into the correct position in
- * the sorted side.
+ * the sorted side progressivly.
  *
  */
 void insertion_sort_list(listint_t **list)
@@ -19,7 +19,7 @@ void insertion_sort_list(listint_t **list)
 	listint_t *to = NULL, *fro = NULL, *new_to = NULL;
 	int swapped = 0;
 
-	/*Starting at next since a list must have atleast 2 items for sorting*/
+	/*Starting at (*list)->next as the list must have atleast 2 items*/
 	if (list && *list && (*list)->next)
 		to = (*list)->next;
 
@@ -27,7 +27,8 @@ void insertion_sort_list(listint_t **list)
 	{
 		swapped = 0;
 		fro = to->prev;
-		/*Find suitable position of "to" in the sorted side*/
+		/*Finding the correct position for the unsorted data*/
+		/*"to" in the sorted side*/
 		while (fro && fro->n > to->n)
 			fro = fro->prev;
 
@@ -60,8 +61,8 @@ void insertion_sort_list(listint_t **list)
 
 /**
  * insert_after - insert src node after dest node
- * @dest: address of the node to insert after
- * @src: address of the node to insert
+ * @dest: address of the pointer to the node to insert after
+ * @src: address of the pointer to the node to insert
  *
  * Return: 1 on success, 0 on failure
  */
@@ -87,15 +88,17 @@ int insert_after(listint_t **dest, listint_t **src)
 	}
 
 	/*Updating dest next pointer and forward neighbour*/
-	(*dest)->next->prev = (*src);
+	if ((*dest)->next)
+		(*dest)->next->prev = (*src);
+
 	(*dest)->next = (*src);
 	return (1);
 }
 
 /**
- * insert_top - makes src the new head of the list
- * @head: address of the head of the list
- * @src: address of the node to insert
+ * insert_top - insert src at the beginning of the linked list
+ * @head: address of the pointer to the head of the list
+ * @src: address of the pointer to the node to insert
  *
  * Return: 1 on success, 0 on failure
  */
