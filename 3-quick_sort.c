@@ -62,11 +62,15 @@ size_t lomuto_partition(int *array, size_t bot, size_t top, size_t size)
 		/*Push items less than or equal to the pivot to the left of piv_i*/
 		if (array[g] <= pivot)
 		{
-			tmp = array[g];
-			array[g] = array[piv_i];
-			array[piv_i] = tmp;
+			if (array[piv_i] > pivot)
+			{
+				tmp = array[g];
+				array[g] = array[piv_i];
+				array[piv_i] = tmp;
+				print_array(array, size);
+			}
+
 			piv_i++;
-			print_array(array, size);
 		}
 
 		g++;
