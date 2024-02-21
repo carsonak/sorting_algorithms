@@ -1,2 +1,5 @@
 # ignore vscode cofig files
 .vscode
+
+# ignore replit stuff
+.ccls-cache

@@ -80,7 +80,8 @@ int insert_after(listint_t **dest, listint_t **src)
 		if ((*src)->next)
 			(*src)->next->prev = (*src)->prev;
 
-		(*src)->prev->next = (*src)->next;
+		if ((*src)->prev)
+			(*src)->prev->next = (*src)->next;
 
 		/*Updating src pointers*/
 		(*src)->next = (*dest)->next;
